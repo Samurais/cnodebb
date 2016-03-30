@@ -51,8 +51,8 @@ categoryController.get = function(req, res, callback) {
 				return helpers.notAllowed(req, res);
 			}
 
-			if ((!req.params.slug || results.categoryData.slug !== cid + '/' + req.params.slug) && (results.categoryData.slug && results.categoryData.slug !== cid + '/')) {
-				return helpers.redirect(res, '/category/' + encodeURI(results.categoryData.slug));
+			if (!res.locals.isAPI && (!req.params.slug || results.categoryData.slug !== cid + '/' + req.params.slug) && (results.categoryData.slug && results.categoryData.slug !== cid + '/')) {
+				return helpers.redirect(res, '/category/' + results.categoryData.slug);
 			}
 
 			var settings = results.userSettings;

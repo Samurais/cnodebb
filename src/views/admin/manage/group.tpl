@@ -9,12 +9,12 @@
 
 				<fieldset>
 					<label for="change-group-desc">Description</label>
-					<input type="text" class="form-control" id="change-group-desc" placeholder="A short description about your group" value="{group.description}" /><br />
+					<input type="text" class="form-control" id="change-group-desc" placeholder="A short description about your group" value="{group.description}" maxlength="255" /><br />
 				</fieldset>
 
 				<fieldset>
 					<label for="change-group-user-title">Title of Members</label>
-					<input type="text" class="form-control" id="change-group-user-title" placeholder="The title of users if they are a member of this group" value="{group.userTitle}"/><br />
+					<input type="text" class="form-control" id="change-group-user-title" placeholder="The title of users if they are a member of this group" value="{group.userTitle}" maxlength="40" /><br />
 				</fieldset>
 
 				<fieldset>
@@ -63,7 +63,7 @@
 				<fieldset>
 					<div class="checkbox">
 						<label>
-							<input id="group-hidden" name="hidden" type="checkbox"<!-- IF group.hidden --> checked<!-- ENDIF group.hidden -->> <strong>[Hidden</strong>
+							<input id="group-hidden" name="hidden" type="checkbox"<!-- IF group.hidden --> checked<!-- ENDIF group.hidden -->> <strong>Hidden</strong>
 							<p class="help-block">
 								If enabled, this group will not be found in the groups listing, and users will have to be invited manually
 							</p>

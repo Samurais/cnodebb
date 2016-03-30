@@ -114,7 +114,7 @@ define('forum/topic/events', [
 		}
 
 		editedPostEl.fadeOut(250, function() {
-			editedPostEl.html(data.post.content);
+			editedPostEl.html(translator.unescape(data.post.content));
 			editedPostEl.find('img:not(.not-responsive)').addClass('img-responsive');
 			app.replaceSelfLinks(editedPostEl.find('a'));
 			posts.wrapImagesInLinks(editedPostEl.parent());
@@ -124,7 +124,7 @@ define('forum/topic/events', [
 
 		var editData = {
 			editor: data.editor,
-			relativeEditTime: utils.toISOString(data.post.edited)
+			editedISO: utils.toISOString(data.post.edited)
 		};
 
 		templates.parse('partials/topic/post-editor', editData, function(html) {
@@ -186,7 +186,7 @@ define('forum/topic/events', [
 			if (isDeleted) {
 				postEl.find('[component="post/content"]').translateHtml('[[topic:post_is_deleted]]');
 			} else {
-				postEl.find('[component="post/content"]').html(data.content);
+				postEl.find('[component="post/content"]').html(translator.unescape(data.content));
 			}
 		}
 	}

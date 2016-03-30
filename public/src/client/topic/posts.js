@@ -10,7 +10,9 @@ define('forum/topic/posts', [
 	'components'
 ], function(pagination, infinitescroll, postTools, navigator, components) {
 
-	var Posts = {};
+	var Posts = {
+		_threshold: 0
+	};
 
 	Posts.onNewPost = function(data) {
 		if (!data || !data.posts || !data.posts.length) {
@@ -26,7 +28,7 @@ define('forum/topic/posts', [
 			post.selfPost = !!app.user.uid && parseInt(post.uid, 10) === parseInt(app.user.uid, 10);
 			post.display_moderator_tools = post.selfPost || ajaxify.data.privileges.isAdminOrMod;
 			post.display_move_tools = ajaxify.data.privileges.isAdminOrMod;
-			post.display_post_menu = post.selfPost || ajaxify.data.privileges.isAdminOrMod;
+			post.display_post_menu = ajaxify.data.privileges.isAdminOrMod || post.selfPost || ((app.user.uid || ajaxify.data.postSharing.length) && !post.deleted);
 		});
 
 		updatePostCounts(data.posts);
@@ -62,7 +64,7 @@ define('forum/topic/posts', [
 
 		if (isPostVisible) {
 			createNewPosts(data, components.get('post').not('[data-index=0]'), direction, scrollToPost);
-		} else if (parseInt(posts[0].uid, 10) === parseInt(app.user.uid, 10)) {
+		} else if (ajaxify.data.scrollToMyPost && parseInt(posts[0].uid, 10) === parseInt(app.user.uid, 10)) {
 			pagination.loadPage(ajaxify.data.pagination.pageCount, scrollToPost);
 		}
 	}
@@ -79,6 +81,9 @@ define('forum/topic/posts', [
 	}
 
 	function scrollToPostIfSelf(post) {
+		if (!ajaxify.data.scrollToMyPost) {
+		    return;
+		}
 		var isSelfPost = parseInt(post.uid, 10) === parseInt(app.user.uid, 10);
 		if (isSelfPost) {
 			navigator.scrollBottom(post.index);
@@ -140,10 +145,16 @@ define('forum/topic/posts', [
 		}
 
 		data.slug = ajaxify.data.slug;
-		
+
 		$(window).trigger('action:posts.loading', {posts: data.posts, after: after, before: before});
 
 		app.parseAndTranslate('topic', 'posts', data, function(html) {
+
+			html = html.filter(function() {
+				var pid = $(this).attr('data-pid');
+				return pid && $('[component="post"][data-pid="' + pid + '"]').length === 0;
+			});
+
 			if (after) {
 				html.insertAfter(after);
 			} else if (before) {
@@ -209,6 +220,7 @@ define('forum/topic/posts', [
 	};
 
 	Posts.processPage = function(posts) {
+		Posts.unloadImages(posts);
 		Posts.showBottomPostBar();
 		posts.find('[component="post/content"] img:not(.not-responsive)').addClass('img-responsive');
 		app.createUserTooltips(posts);
@@ -220,6 +232,81 @@ define('forum/topic/posts', [
 
 		addBlockquoteEllipses(posts.find('[component="post/content"] > blockquote > blockquote'));
 		hidePostToolsForDeletedPosts(posts);
+	};
+
+	Posts.unloadImages = function(posts) {
+		var images = posts.find('[component="post/content"] img:not(.not-responsive)'),
+			scrollTop = $(window).scrollTop(),
+			height = $(document).height();
+
+		images.each(function() {
+			$(this).attr('data-src', $(this).attr('src'));
+			$(this).attr('data-state', 'unloaded');
+			$(this).attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+		});
+
+		$(window).scrollTop(scrollTop + $(document).height() - height);
+	};
+
+	Posts.loadImages = function(threshold) {
+		/*
+			If threshold is defined, images loaded above this threshold will modify
+			the user's scroll position so they are not scrolled away from content
+			they were reading. Images loaded below this threshold will push down content.
+
+			If no threshold is defined, loaded images will push down content, as per
+			default
+		*/
+		Posts._threshold = threshold;
+
+		var images = components.get('post/content').find('img[data-state="unloaded"]'),
+			visible = images.filter(function() {
+				return utils.isElementInViewport(this);
+			}),
+			scrollTop = $(window).scrollTop(),
+			adjusting = false,
+			adjustQueue = [],
+			adjustPosition = function() {
+				adjusting = true;
+				oldHeight = document.body.clientHeight;
+
+				// Display the image
+				$(this).attr('data-state', 'loaded');
+				newHeight = document.body.clientHeight;
+
+				var imageRect = this.getBoundingClientRect();
+				if (imageRect.top < Posts._threshold) {
+					scrollTop = scrollTop + (newHeight - oldHeight);
+					$(window).scrollTop(scrollTop);
+				}
+
+				if (adjustQueue.length) {
+					adjustQueue.pop()();
+				} else {
+					adjusting = false;
+				}
+			},
+			oldHeight, newHeight;
+
+		// For each image, reset the source and adjust scrollTop when loaded
+		visible.attr('data-state', 'loading');
+		visible.each(function(index, image) {
+			image = $(image);
+
+			image.on('load', function() {
+				if (!adjusting) {
+					adjustPosition.call(this);
+				} else {
+					adjustQueue.push(adjustPosition.bind(this));
+				}
+			});
+
+			image.attr('src', image.attr('data-src'));
+			if (image.parent().attr('href')) {
+				image.parent().attr('href', image.attr('data-src'));
+			}
+			image.removeAttr('data-src');
+		});
 	};
 
 	Posts.wrapImagesInLinks = function(posts) {
@@ -234,10 +321,13 @@ define('forum/topic/posts', [
 	Posts.showBottomPostBar = function() {
 		var mainPost = components.get('post', 'index', 0);
 		var posts = $('[component="post"]');
+		var height = $(document).height();
 		if (!!mainPost.length && posts.length > 1 && $('.post-bar').length < 2) {
 			$('.post-bar').clone().appendTo(mainPost);
+			$(window).scrollTop($(window).scrollTop() + $(document).height() - height);
 		} else if (mainPost.length && posts.length < 2) {
 			mainPost.find('.post-bar').remove();
+			$(window).scrollTop($(window).scrollTop() - $(document).height() - height);
 		}
 	};
 
