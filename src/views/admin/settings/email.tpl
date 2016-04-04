@@ -36,7 +36,7 @@
 				<label for="email:QQexTransport:user"><strong>Username</strong></label>
 				<input type="text" class="form-control input-lg" id="email:QQexTransport:user" data-field="email:QQexTransport:user" placeholder="admin@example.org" /><br />
 				<p class="help-block">
-					Enter the full email address here, especially if you are using a QQex App managed domain.
+					Enter the full email address here, especially if you are using a self-managed domain.
 				</p>
 			</div>
 			<div class="form-group">
