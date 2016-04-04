@@ -29,7 +29,7 @@
 			<div class="checkbox">
 				<label for="email:QQexTransport:enabled" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
 					<input class="mdl-switch__input" type="checkbox" id="email:QQexTransport:enabled" data-field="email:QQexTransport:enabled" name="email:QQexTransport:enabled" />
-					<span class="mdl-switch__label">Route emails through a QQex App account</span>
+					<span class="mdl-switch__label">Route emails through a QQex email account</span>
 				</label>
 			</div>
 			<div class="form-group">
