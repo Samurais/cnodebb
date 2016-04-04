@@ -17,7 +17,7 @@ var translator = require('../public/src/modules/translator');
 
 var transports = {
 	sendmail: nodemailer.createTransport(sendmailTransport()),
-	gmail: undefined
+	QQex: undefined
 };
 
 var app;
@@ -27,16 +27,16 @@ var fallbackTransport;
 	Emailer.registerApp = function(expressApp) {
 		app = expressApp;
 
-		// Enable Gmail transport if enabled in ACP
-		if (parseInt(meta.config['email:GmailTransport:enabled'], 10) === 1) {
-			fallbackTransport = transports.gmail = nodemailer.createTransport(smtpTransport({
+		// Enable QQex transport if enabled in ACP
+		if (parseInt(meta.config['email:QQexTransport:enabled'], 10) === 1) {
+			fallbackTransport = transports.QQex = nodemailer.createTransport(smtpTransport({
 				// host: 'smtp.exmail.qq.com',
 				// port: 465,
 				// secure: true,
 				service: 'QQex',
 				auth: {
-					user: meta.config['email:GmailTransport:user'],
-					pass: meta.config['email:GmailTransport:pass']
+					user: meta.config['email:QQexTransport:user'],
+					pass: meta.config['email:QQexTransport:pass']
 				}
 			}));
 		} else {

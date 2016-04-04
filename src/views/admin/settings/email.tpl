@@ -27,21 +27,21 @@
 	<div class="col-sm-10 col-xs-12">
 		<form>
 			<div class="checkbox">
-				<label for="email:GmailTransport:enabled" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-					<input class="mdl-switch__input" type="checkbox" id="email:GmailTransport:enabled" data-field="email:GmailTransport:enabled" name="email:GmailTransport:enabled" />
+				<label for="email:QQexTransport:enabled" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+					<input class="mdl-switch__input" type="checkbox" id="email:QQexTransport:enabled" data-field="email:QQexTransport:enabled" name="email:QQexTransport:enabled" />
 					<span class="mdl-switch__label">Route emails through a QQex App account</span>
 				</label>
 			</div>
 			<div class="form-group">
-				<label for="email:GmailTransport:user"><strong>Username</strong></label>
-				<input type="text" class="form-control input-lg" id="email:GmailTransport:user" data-field="email:GmailTransport:user" placeholder="admin@example.org" /><br />
+				<label for="email:QQexTransport:user"><strong>Username</strong></label>
+				<input type="text" class="form-control input-lg" id="email:QQexTransport:user" data-field="email:QQexTransport:user" placeholder="admin@example.org" /><br />
 				<p class="help-block">
 					Enter the full email address here, especially if you are using a QQex App managed domain.
 				</p>
 			</div>
 			<div class="form-group">
-				<label for="email:GmailTransport:pass"><strong>Password</strong></label>
-				<input type="password" class="form-control input-lg" id="email:GmailTransport:pass" data-field="email:GmailTransport:pass" /><br />
+				<label for="email:QQexTransport:pass"><strong>Password</strong></label>
+				<input type="password" class="form-control input-lg" id="email:QQexTransport:pass" data-field="email:QQexTransport:pass" /><br />
 			</div>
 		</form>
 	</div>
