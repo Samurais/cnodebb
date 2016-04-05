@@ -48,3 +48,6 @@ pidfile
 ## Transifex
 tx.exe
 .transifexrc
+
+# docker build
+dockerlize/build
