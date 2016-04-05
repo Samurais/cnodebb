@@ -11,7 +11,7 @@ var	nconf = require('nconf'),
 	file = require('./src/file'),
 	pkg = require('./package.json');
 
-nconf.argv().env().file({
+nconf.argv().env('__').file({
 	file: path.join(__dirname, '/config.json')
 });
 
