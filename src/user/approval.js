@@ -178,12 +178,12 @@ module.exports = function(User) {
 						if (err) {
 							return next(null, user);
 						}
-						if (response.statusCode === 200) {
-							user.spamData = body;
-							user.usernameSpam = body.username.frequency > 0 || body.username.appears > 0;
-							user.emailSpam = body.email.frequency > 0 || body.email.appears > 0;
-							user.ipSpam = body.ip.frequency > 0 || body.ip.appears > 0;
-						}
+						// if (response.statusCode === 200) {
+						// 	user.spamData = body;
+						// 	user.usernameSpam = body.username.frequency > 0 || body.username.appears > 0;
+						// 	user.emailSpam = body.email.frequency > 0 || body.email.appears > 0;
+						// 	user.ipSpam = body.ip.frequency > 0 || body.ip.appears > 0;
+						// }
 
 						next(null, user);
 					});
