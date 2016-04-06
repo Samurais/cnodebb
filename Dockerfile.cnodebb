@@ -1,7 +1,4 @@
-# The base image is the latest 4.x node (LTS) on jessie (debian)
-# -onbuild will install the node dependencies found in the project package.json
-# and copy its content in /usr/src/app, its WORKDIR
-FROM arrking/node:v4.2.1
+FROM arrking/base:latest
 MAINTAINER Hain Wang <hailiang.hl.wang@gmail.com>
 
 ENV NODE_ENV=production \
