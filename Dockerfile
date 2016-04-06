@@ -1,4 +1,4 @@
-FROM index.alauda.cn/node:4.2.1
+FROM index.alauda.cn/hain/node:4.2.1
 MAINTAINER Hain Wang <hailiang.hl.wang@gmail.com>
 
 ENV NODE_ENV=production \
