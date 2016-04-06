@@ -6,9 +6,6 @@ ENV NODE_ENV=production \
     silent=false
 
 
-ARG CNODEBB_CIT_ID
-ARG CNODEBB_ROLE
-
 ## Move source codes into ~/git
 RUN mkdir -p /root/git/cnodebb
 RUN mkdir -p /root/git/cnodebb

@@ -18,8 +18,7 @@ cd $baseDir/..
 
 eval "$(docker-machine env docker-default)"
 
-docker build --build-arg CNODEBB_CIT_ID=$CIT_ID \
-    --build-arg CNODEBB_ROLE=application \
+docker build \
     --force-rm=true \
     --tag arrking/cnodebb:$CIT_ID \
     --file="Dockerfile.cnodebb" .
