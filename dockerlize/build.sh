@@ -20,7 +20,7 @@ eval "$(docker-machine env docker-default)"
 
 docker build \
     --force-rm=true \
-    --tag arrking/cnodebb:$CIT_ID \
-    --file="Dockerfile.cnodebb" .
+    --tag hain/cnodebb:$CIT_ID \
+    --file="Dockerfile" .
 
-docker tag -f arrking/cnodebb:$CIT_ID arrking/cnodebb:latest
+docker tag -f hain/cnodebb:$CIT_ID hain/cnodebb:latest

@@ -12,13 +12,15 @@ RUN mkdir -p /root/git/cnodebb
 
 ## Move source codes into ~/git
 COPY . /root/git/cnodebb
-COPY ./dockerlize/config.sample.json /root/git/cnodebb/config.json
 
 ## Install modules
 WORKDIR /root/git/cnodebb/
 RUN npm install -d
 
-ENTRYPOINT ["npm", "start"]
+# Copy a config placeholder
+COPY ./dockerlize/config.sample.json /root/git/cnodebb/config.json
+
+ENTRYPOINT ["./nodebb", "dev"]
 
 # the default port for NodeBB is exposed outside the container
 EXPOSE 4567

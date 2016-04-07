@@ -15,11 +15,6 @@ nconf.argv().env('__').file({
 	file: path.join(__dirname, '/config.json')
 });
 
-// In docker cloud, alauda export the router into process.env as __DEFAULT_DOMAIN_NAME__.
-if (process.env['__DEFAULT_DOMAIN_NAME__']) {
-    nconf.set('url', 'http://' + process.env['__DEFAULT_DOMAIN_NAME__']);
-}
-
 var	pidFilePath = __dirname + '/pidfile',
 	output = logrotate({ file: __dirname + '/logs/output.log', size: '1m', keep: 3, compress: true }),
 	silent = nconf.get('silent') === 'false' ? false : nconf.get('silent') !== false,
