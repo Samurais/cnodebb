@@ -11,12 +11,14 @@ var notifications = require('../notifications');
 var groups = require('../groups');
 var translator = require('../../public/src/modules/translator');
 var utils = require('../../public/src/utils');
+var password;
 
 
 module.exports = function(User) {
 
 	User.addToApprovalQueue = function(userData, callback) {
 		userData.userslug = utils.slugify(userData.username);
+		password = userData.password;
 		async.waterfall([
 			function(next) {
 				User.isDataValid(userData, next);
@@ -81,6 +83,7 @@ module.exports = function(User) {
 				translator.translate('[[email:welcome-to, ' + title + ']]', meta.config.defaultLang, function(subject) {
 					var data = {
 						site_title: title,
+						password: password,
 						username: username,
 						subject: subject,
 						template: 'registration_accepted',
