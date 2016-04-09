@@ -3,6 +3,7 @@
 
 var async = require('async');
 var request = require('request');
+var nconf = require('nconf');
 
 var db = require('../database');
 var meta = require('../meta');
@@ -84,6 +85,7 @@ module.exports = function(User) {
 						username: username,
 						subject: subject,
 						template: 'registration_accepted',
+						url: nconf.get('url'),
 						uid: uid
 					};
 
