@@ -13,6 +13,7 @@ var events = require('../events');
 var emailer = require('../emailer');
 var db = require('../database');
 var apiController = require('../controllers/api');
+var nconf = require('nconf');
 
 var SocketUser = {};
 
@@ -116,7 +117,8 @@ SocketUser.reset.commit = function(socket, data, callback) {
 				username: username,
 				date: parsedDate,
 				site_title: meta.config.title || 'NodeBB',
-				subject: '[[email:reset.notify.subject]]'
+				subject: '[[email:reset.notify.subject]]',
+				url: nconf.get('url')
 			});
 		});
 
