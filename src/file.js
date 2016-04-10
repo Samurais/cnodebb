@@ -5,15 +5,15 @@ var fs = require('fs'),
     path = require('path'),
     winston = require('winston'),
     jimp = require('jimp'),
-    store = require('./store'),
+
     utils = require('../public/src/utils');
 
 var file = {};
 
 file.saveFileToLocal = function(filename, folder, tempPath, callback) {
     /*
-     * remarkable doesn't allow spaces in hyperlinks, once that's fixed, remove this.
-     */
+    * remarkable doesn't allow spaces in hyperlinks, once that's fixed, remove this.
+    */
     filename = filename.split('.');
     filename.forEach(function(name, idx) {
         filename[idx] = utils.slugify(name);
@@ -22,86 +22,77 @@ file.saveFileToLocal = function(filename, folder, tempPath, callback) {
 
     var uploadPath = path.join(nconf.get('base_dir'), nconf.get('upload_path'), folder, filename);
 
-    winston.verbose('Saving file ' + filename + ' to : ' + uploadPath);
+    winston.verbose('Saving file '+ filename +' to : ' + uploadPath);
 
     var is = fs.createReadStream(tempPath);
     var os = fs.createWriteStream(uploadPath);
 
-    is.on('end', function() {
-        store.upload(uploadPath, function(err, result) {
-            if (err)
-                return callback(err);
-            if (result) {
-                callback(null, {
-                    url: result
-                });
-            } else {
-                callback(null, {
-                    url: nconf.get('upload_url') + folder + '/' + filename
-                });
-            }
-        })
+    is.on('end', function () {
+        callback(null, {
+            url: nconf.get('upload_url') + folder + '/' + filename
+        });
     });
 
     os.on('error', callback);
 
     is.pipe(os);
 };
-file.base64ToLocal = function(imageData, uploadPath, callback) {
-	var buffer = new Buffer(imageData.slice(imageData.indexOf('base64') + 7), 'base64');
-	uploadPath = path.join(nconf.get('base_dir'), nconf.get('upload_path'), uploadPath);
 
-	fs.writeFile(uploadPath, buffer, {
-		encoding: 'base64'
-	}, function(err) {
-		callback(err, uploadPath);
-	});
+file.base64ToLocal = function(imageData, uploadPath, callback) {
+    var buffer = new Buffer(imageData.slice(imageData.indexOf('base64') + 7), 'base64');
+    uploadPath = path.join(nconf.get('base_dir'), nconf.get('upload_path'), uploadPath);
+
+    fs.writeFile(uploadPath, buffer, {
+        encoding: 'base64'
+    }, function(err) {
+        callback(err, uploadPath);
+    });
 };
 
 file.isFileTypeAllowed = function(path, callback) {
-	// Attempt to read the file, if it passes, file type is allowed
-	jimp.read(path, function(err) {
-		callback(err);
-	});
+    // Attempt to read the file, if it passes, file type is allowed
+    jimp.read(path, function(err) {
+        callback(err);
+    });
 };
 
 file.allowedExtensions = function() {
-	var meta = require('./meta');
-	var allowedExtensions = (meta.config.allowedFileExtensions || '').trim();
-	if (!allowedExtensions) {
-		return [];
-	}
-	allowedExtensions = allowedExtensions.split(',');
-	allowedExtensions = allowedExtensions.filter(Boolean).map(function(extension) {
-		extension = extension.trim();
-		if (!extension.startsWith('.')) {
-			extension = '.' + extension;
-		}
-		return extension;
-	});
+    var meta = require('./meta');
+    var allowedExtensions = (meta.config.allowedFileExtensions || '').trim();
+    if (!allowedExtensions) {
+        return [];
+    }
+    allowedExtensions = allowedExtensions.split(',');
+    allowedExtensions = allowedExtensions.filter(Boolean).map(function(extension) {
+        extension = extension.trim();
+        if (!extension.startsWith('.')) {
+            extension = '.' + extension;
+        }
+        return extension;
+    });
 
-	if (allowedExtensions.indexOf('.jpg') !== -1 && allowedExtensions.indexOf('.jpeg') === -1) {
-		allowedExtensions.push('.jpeg');
-	}
+    if (allowedExtensions.indexOf('.jpg') !== -1 && allowedExtensions.indexOf('.jpeg') === -1) {
+        allowedExtensions.push('.jpeg');
+    }
 
-	return allowedExtensions;
+    return allowedExtensions;
 };
 
 file.exists = function(path, callback) {
-	fs.stat(path, function(err, stat) {
-		callback(!err && stat);
-	});
+    fs.stat(path, function(err, stat) {
+        callback(!err && stat);
+    });
 };
 
 file.existsSync = function(path) {
-	var exists = false;
-	try {
-		exists = fs.statSync(path);
-	} catch(err) {
-		exists = false;
-	}
+    var exists = false;
+    try {
+        exists = fs.statSync(path);
+    } catch(err) {
+        exists = false;
+    }
 
-	return !!exists;
+    return !!exists;
 };
 
 module.exports = file;
