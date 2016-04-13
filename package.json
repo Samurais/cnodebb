@@ -46,6 +46,7 @@
     "nconf": "~0.8.2",
     "nodebb-plugin-composer-default": "3.0.18",
     "nodebb-plugin-emoji-extended": "1.0.3",
+    "nodebb-plugin-lightbox": "github:exo-do/nodebb-plugin-lightbox",
     "nodebb-plugin-markdown": "5.0.1",
     "nodebb-plugin-mentions": "1.0.21",
     "nodebb-plugin-qn": "^1.0.2",
