@@ -78,10 +78,11 @@ module.exports = function(User) {
 				User.setUserField(uid, 'password', userData.hashedPassword, next);
 			},
 			function(next) {
-				var title = meta.config.title || meta.config.browserTitle || 'NodeBB';
+				// var title = meta.config.title || meta.config.browserTitle || 'NodeBB';
+				var title = "Rockq";
 				translator.translate('[[email:welcome-to, ' + title + ']]', meta.config.defaultLang, function(subject) {
 					var data = {
-						site_title: "Rockq",
+						site_title: title,
 						username: username,
 						subject: subject,
 						template: 'registration_accepted',
