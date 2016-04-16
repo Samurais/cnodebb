@@ -63,7 +63,8 @@ var emailer = require('../emailer');
 				user.getUserField(uid, 'username', next);
 			},
 			function(username, next) {
-				var title = meta.config.title || meta.config.browserTitle || 'NodeBB';
+				// var title = meta.config.title || meta.config.browserTitle || 'NodeBB';
+				var title = nconf.get('site_title');
 				translator.translate('[[email:welcome-to, ' + title + ']]', meta.config.defaultLang, function(subject) {
 					var data = {
 						site_title: title,

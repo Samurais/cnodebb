@@ -100,11 +100,11 @@ var	async = require('async'),
 					}
 
 					emailer.send('digest', userObj.uid, {
-						subject: '[' + meta.config.title + '] Digest for ' + now.getFullYear()+ '/' + (now.getMonth()+1) + '/' + now.getDate(),
+						subject: '['+ nconf.get('site_title') +'] Digest for ' + now.getFullYear()+ '/' + (now.getMonth()+1) + '/' + now.getDate(),
 						username: userObj.username,
 						userslug: userObj.userslug,
 						url: nconf.get('url'),
-						site_title: meta.config.title || meta.config.browserTitle || 'NodeBB',
+						site_title: nconf.get('site_title'),
 						notifications: notifications,
 						recent: data.topics.topics,
 						interval: data.interval

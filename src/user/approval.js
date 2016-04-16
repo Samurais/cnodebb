@@ -79,7 +79,7 @@ module.exports = function(User) {
 			},
 			function(next) {
 				// var title = meta.config.title || meta.config.browserTitle || 'NodeBB';
-				var title = "Rockq";
+				var title = nconf.get('site_title');
 				translator.translate('[[email:welcome-to, ' + title + ']]', meta.config.defaultLang, function(subject) {
 					var data = {
 						site_title: title,
