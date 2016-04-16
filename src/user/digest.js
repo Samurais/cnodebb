@@ -37,7 +37,14 @@ var	async = require('async'),
 			data.topics.topics = data.topics.topics.map(function(topicObj) {
 				var user = topicObj.hasOwnProperty('teaser') && topicObj.teaser !== undefined ? topicObj.teaser.user : topicObj.user;
 				if (user && user.picture && utils.isRelativeUrl(user.picture)) {
-					user.picture = nconf.get('base_url') + user.picture;
+					// https://github.com/rockq-org/cnodebb/issues/38
+					// all images upload to cdn, e.g qinu, is prefix with '//'
+					// so, fix the image url with http.
+					if(user.picture.startsWith("//")){
+						user.picture = "http:" + user.picture;
+					} else {
+						user.picture = nconf.get('base_url') + user.picture;
+					}
 				}
 
 				return topicObj;
