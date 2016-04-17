@@ -1,12 +1,13 @@
 "use strict";
-/*global config, define, app, socket, ajaxify, bootbox, templates, Chart, utils */
+/*global config, define, app, socket, ajaxify, bootbox, templates */
 
 define('admin/manage/category', [
 	'uploader',
 	'iconSelect',
 	'admin/modules/colorpicker',
-	'autocomplete'
-], function(uploader, iconSelect, colorpicker, autocomplete) {
+	'autocomplete',
+	'Chart'
+], function(uploader, iconSelect, colorpicker, autocomplete, Chart) {
 	var	Category = {};
 
 	Category.init = function() {
@@ -95,6 +96,48 @@ define('admin/manage/category', [
 					}
 					app.alertSuccess('Category purged!');
 					ajaxify.go('admin/manage/categories');
+				});
+			});
+		});
+
+		$('.copy-settings').on('click', function(e) {
+			e.preventDefault();
+			socket.emit('admin.categories.getNames', function(err, categories) {
+				if (err) {
+					return app.alertError(err.message);
+				}
+
+				templates.parse('admin/partials/categories/select-category', {
+					categories: categories
+				}, function(html) {
+					function submit() {
+						var formData = modal.find('form').serializeObject();
+
+						socket.emit('admin.categories.copySettingsFrom', {fromCid: formData['select-cid'], toCid: ajaxify.data.category.cid}, function(err) {
+							if (err) {
+								return app.alertError(err.message);
+							}
+							app.alertSuccess('Settings Copied!');
+							ajaxify.refresh();
+						});
+
+						modal.modal('hide');
+						return false;
+					}
+
+					var modal = bootbox.dialog({
+						title: 'Select a Category',
+						message: html,
+						buttons: {
+							save: {
+								label: 'Copy',
+								className: 'btn-primary',
+								callback: submit
+							}
+						}
+					});
+
+					modal.find('form').on('submit', submit);
 				});
 			});
 		});
