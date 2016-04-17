@@ -18,6 +18,7 @@
     "reset.notify.text1": "你在",
     "reset.notify.text2": "如果你没有授权此操作，建议立即联系管理员。",
     "reset.notify.text3": "上的密码被修改。",
+    "digest.subject": "今日摘要 %1",
     "digest.notifications": "你有来自 %1 的未读通知：",
     "digest.latest_topics": "来自 %1 的最新主题",
     "digest.cta": "点击这里访问 %1",
