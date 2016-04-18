@@ -57,7 +57,7 @@
     "nodebb-plugin-solr": "^2.0.16",
     "nodebb-plugin-soundpack-default": "0.1.6",
     "nodebb-plugin-spam-be-gone": "0.4.6",
-    "nodebb-plugin-wechat-share": "^0.1.0",
+    "nodebb-plugin-wechat-share": "^0.1.2",
     "nodebb-rewards-essentials": "0.0.8",
     "nodebb-theme-lavender": "3.0.9",
     "nodebb-theme-persona": "4.0.120",
