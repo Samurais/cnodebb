@@ -41,6 +41,8 @@ var utils = require('../../public/src/utils');
 					// so, fix the image url with http.
 					if(user.picture.startsWith("//")){
 						user.picture = "http:" + user.picture;
+					} else if (user.picture.startsWith("http")){
+						// do thing, keep the value
 					} else {
 						user.picture = nconf.get('base_url') + user.picture;
 					}
