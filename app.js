@@ -23,6 +23,11 @@
 var nconf = require('nconf');
 nconf.argv().env('__');
 
+// https://github.com/rockq-org/cnodebb/issues/37
+if(nconf.get('is_oneapm') == 'true'){
+	require('oneapm');
+}
+
 var url = require('url'),
 	async = require('async'),
 	winston = require('winston'),
