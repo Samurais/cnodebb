@@ -51,3 +51,6 @@ tx.exe
 
 # docker build
 dockerlize/build
+
+# OneAPM
+oneapm.js

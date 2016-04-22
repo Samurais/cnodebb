@@ -5,7 +5,6 @@ var	nconf = require('nconf'),
 	url = require('url'),
 	path = require('path'),
 	fork = require('child_process').fork,
-
 	async = require('async'),
 	logrotate = require('logrotate-stream'),
 	file = require('./src/file'),
@@ -14,6 +13,11 @@ var	nconf = require('nconf'),
 nconf.argv().env('__').file({
 	file: path.join(__dirname, '/config.json')
 });
+
+// https://github.com/rockq-org/cnodebb/issues/37
+if(nconf.get('is_oneapm') == 'true'){
+	require('oneapm');
+}
 
 var	pidFilePath = __dirname + '/pidfile',
 	output = logrotate({ file: __dirname + '/logs/output.log', size: '1m', keep: 3, compress: true }),
